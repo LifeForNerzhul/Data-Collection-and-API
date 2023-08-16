@@ -12,20 +12,22 @@ def get_data(site: tuple, headers: dict):
         return 0
 
 
-def ali():
-    pass
+def ali(soup):
+    price = soup.find('div', class_='snow-price_SnowPrice__mainS__jlh6el').text.replace('\xa0', '')
+    price = price.replace(' ', '')
+    return int(price[:price.find(','):])
 
 
-def bit():
-    pass
+def bit(soup):
+    return int(soup.find('span', class_="price").text.replace('₽', '').replace(' ', ''))
 
 
-def xpert():
-    pass
+def xpert(soup):
+    return int(soup.find('span', style='font-size:23px;').text)
 
 
-def compday():
-    pass
+def compday(soup):
+    return int(soup.find('b', class_='actual cash price').text.replace(' ', ''))
 
 
 browser_headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/113.0'}
@@ -41,3 +43,5 @@ site_dict = {
 
 for i in site_dict:
     print(site_dict.get(i))
+    print(get_data(site_dict.get(i), browser_headers))
+    print("---------------------------------------------------")
