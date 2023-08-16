@@ -2,6 +2,19 @@ import requests
 from bs4 import BeautifulSoup
 
 
+def upload_to_db(shop_name: str, item_price: int, headers: dict):
+    # Без headers не проходит
+    # payload = { 'shop_name': shop_name, 'price': item_price}
+    # r = requests.post('https://apex.oracle.com/pls/apex/sokolov_apex/shops_api/insert', params=payload, headers=headers)
+    r = requests.post(
+        f'https://apex.oracle.com/pls/apex/sokolov_apex/shops_api/insert?shop_name={shop_name}&price={item_price}',
+        headers=headers
+    )
+    print('ушло', r.url)
+    if r.status_code != 201:
+        input(f'Ошибка при загрузке в БД, код {r.status_code}')
+
+
 def get_data(site: tuple, headers: dict):
     """ Get HTML page from site and passes the HTML to the price lookup function, return int price or 0 if failed
 
@@ -53,5 +66,8 @@ site_dict = {
 
 for i in site_dict:
     print(site_dict.get(i))
-    print(get_data(site_dict.get(i), browser_headers))
+    price = get_data(site_dict.get(i), browser_headers)
+    print(price)
+    print(i, price)
+    upload_to_db(i, price, browser_headers)
     print("---------------------------------------------------")
