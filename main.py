@@ -3,6 +3,12 @@ from bs4 import BeautifulSoup
 
 
 def get_data(site: tuple, headers: dict):
+    """ Get HTML page from site and passes the HTML to the price lookup function, return int price or 0 if failed
+
+    :param site: tuple that contains an indication of the processing function and site link
+    :param headers: dict with headers to simulate a browser
+    :return: int price or 0
+    """
     try:
         html = requests.get(site[1], headers=headers, timeout=5)
         soup = BeautifulSoup(html.text, 'html.parser')
@@ -13,20 +19,24 @@ def get_data(site: tuple, headers: dict):
 
 
 def ali(soup):
+    """ function to find and return int price of item on html page on aliexpress """
     price = soup.find('div', class_='snow-price_SnowPrice__mainS__jlh6el').text.replace('\xa0', '')
     price = price.replace(' ', '')
     return int(price[:price.find(','):])
 
 
 def bit(soup):
+    """ function to find and return int price of item on html page on 28bit.ru """
     return int(soup.find('span', class_="price").text.replace('₽', '').replace(' ', ''))
 
 
 def xpert(soup):
+    """ function to find and return int price of item on html page on xpert.ru """
     return int(soup.find('span', style='font-size:23px;').text)
 
 
 def compday(soup):
+    """ function to find and return int price of item on html page on compday.ru """
     return int(soup.find('b', class_='actual cash price').text.replace(' ', ''))
 
 
