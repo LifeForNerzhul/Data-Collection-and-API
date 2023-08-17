@@ -4,6 +4,12 @@ from datetime import datetime
 
 
 def last_upload(headers: dict):
+    """ Get date of last entry in DB
+    If for some reason we did not receive a response, then we return the current date
+
+    :param headers: dict with headers to simulate a browser
+    :return: str with date as YYYY-MM-DD
+    """
     try:
         r = requests.get('https://apex.oracle.com/pls/apex/sokolov_apex/shops_api/get-last-date',
                          headers=headers, timeout=5)
@@ -14,6 +20,15 @@ def last_upload(headers: dict):
 
 
 def upload_to_db(shop_name: str, item_price: int, headers: dict):
+    """ loading data into my ORACLE DB
+    Data is transferred with the URL using the POST method
+    If the server returns a code other than 201, then an error message and a response code are displayed
+    Only one record can be sent at a time
+
+    :param shop_name:  str with store name
+    :param item_price: int
+    :param headers: dict with headers to simulate a browser
+    """
     # Без headers не проходит
     # payload = { 'shop_name': shop_name, 'price': item_price}
     # r = requests.post('https://apex.oracle.com/pls/apex/sokolov_apex/shops_api/insert', params=payload, headers=headers)
@@ -44,9 +59,9 @@ def get_data(site: tuple, headers: dict):
 
 def ali(soup):
     """ function to find and return int price of item on html page on aliexpress """
-    price = soup.find('div', class_='snow-price_SnowPrice__mainS__jlh6el').text.replace('\xa0', '')
-    price = price.replace(' ', '')
-    return int(price[:price.find(','):])
+    ali_price = soup.find('div', class_='snow-price_SnowPrice__mainS__jlh6el').text.replace('\xa0', '')
+    ali_price = ali_price.replace(' ', '')
+    return int(ali_price[:ali_price.find(','):])
 
 
 def bit(soup):
@@ -77,6 +92,7 @@ if __name__ == '__main__':
         # 'Compday': (compday, 'https://www.compday.ru/komplektuyuszie/protsessory/335378.html'),
     }
 
+    #   Checking whether the data was entered today or not
     if last_upload(browser_headers) != datetime.today().strftime('%Y-%m-%d'):
         print(True)
         for i in site_dict:
