@@ -1,5 +1,16 @@
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
+
+
+def last_upload(headers: dict):
+    try:
+        r = requests.get('https://apex.oracle.com/pls/apex/sokolov_apex/shops_api/get-last-date',
+                         headers=headers, timeout=5)
+        last_date = r.json().get('items')[0].get('last_upload')
+        return last_date[:last_date.find('T'):]
+    except:
+        return datetime.today().strftime('%Y-%m-%d')
 
 
 def upload_to_db(shop_name: str, item_price: int, headers: dict):
@@ -53,21 +64,27 @@ def compday(soup):
     return int(soup.find('b', class_='actual cash price').text.replace(' ', ''))
 
 
-browser_headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/113.0'}
-site_dict = {
-    '28bit': (bit, 'https://28bit.ru/protsessor-amd-ryzen-r5-5500-oem-100-000000457/'),
-    'TaiYuan Store': (ali, 'https://aliexpress.ru/item/1005004129008837.html?sku_id=12000028130627271'),
-    'cp u Store': (ali, 'https://aliexpress.ru/item/1005004580381433.html?sku_id=12000029704059533'),
-    'PYD Store': (ali, 'https://aliexpress.ru/item/1005004806327244.html?sku_id=12000030563931763'),
+if __name__ == '__main__':
 
-    # 'Xpert': (xpert, 'https://www.xpert.ru/products.php?showProduct=191570'),
-    # 'Compday': (compday, 'https://www.compday.ru/komplektuyuszie/protsessory/335378.html'),
-}
+    browser_headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/113.0'}
+    site_dict = {
+        '28bit': (bit, 'https://28bit.ru/protsessor-amd-ryzen-r5-5500-oem-100-000000457/'),
+        'TaiYuan Store': (ali, 'https://aliexpress.ru/item/1005004129008837.html?sku_id=12000028130627271'),
+        'cp u Store': (ali, 'https://aliexpress.ru/item/1005004580381433.html?sku_id=12000029704059533'),
+        'PYD Store': (ali, 'https://aliexpress.ru/item/1005004806327244.html?sku_id=12000030563931763'),
 
-for i in site_dict:
-    print(site_dict.get(i))
-    price = get_data(site_dict.get(i), browser_headers)
-    print(price)
-    print(i, price)
-    upload_to_db(i, price, browser_headers)
-    print("---------------------------------------------------")
+        # 'Xpert': (xpert, 'https://www.xpert.ru/products.php?showProduct=191570'),
+        # 'Compday': (compday, 'https://www.compday.ru/komplektuyuszie/protsessory/335378.html'),
+    }
+
+    if last_upload(browser_headers) != datetime.today().strftime('%Y-%m-%d'):
+        print(True)
+        for i in site_dict:
+            print(site_dict.get(i))
+            price = get_data(site_dict.get(i), browser_headers)
+            print(price)
+            print(i, price)
+            upload_to_db(i, price, browser_headers)
+            print("---------------------------------------------------")
+    else:
+        print(False)
