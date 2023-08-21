@@ -30,13 +30,14 @@ def upload_to_db(shop_name: str, item_price: int, headers: dict):
     :param headers: dict with headers to simulate a browser
     """
     # Без headers не проходит
+    # И второй вариант
     # payload = { 'shop_name': shop_name, 'price': item_price}
     # r = requests.post('https://apex.oracle.com/pls/apex/sokolov_apex/shops_api/insert', params=payload, headers=headers)
     r = requests.post(
         f'https://apex.oracle.com/pls/apex/sokolov_apex/shops_api/insert?shop_name={shop_name}&price={item_price}',
         headers=headers
     )
-    print('ушло', r.url)
+
     if r.status_code != 201:
         input(f'Ошибка при загрузке в БД, код {r.status_code}')
 
@@ -94,13 +95,8 @@ if __name__ == '__main__':
 
     #   Checking whether the data was entered today or not
     if last_upload(browser_headers) != datetime.today().strftime('%Y-%m-%d'):
-        print(True)
         for i in site_dict:
-            print(site_dict.get(i))
             price = get_data(site_dict.get(i), browser_headers)
-            print(price)
-            print(i, price)
             upload_to_db(i, price, browser_headers)
-            print("---------------------------------------------------")
-    else:
-        print(False)
+
+
