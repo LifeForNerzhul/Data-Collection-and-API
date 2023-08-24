@@ -88,9 +88,8 @@ if __name__ == '__main__':
         'TaiYuan Store': (ali, 'https://aliexpress.ru/item/1005004129008837.html?sku_id=12000028130627271'),
         'cp u Store': (ali, 'https://aliexpress.ru/item/1005004580381433.html?sku_id=12000029704059533'),
         'PYD Store': (ali, 'https://aliexpress.ru/item/1005004806327244.html?sku_id=12000030563931763'),
-
-        # 'Xpert': (xpert, 'https://www.xpert.ru/products.php?showProduct=191570'),
-        # 'Compday': (compday, 'https://www.compday.ru/komplektuyuszie/protsessory/335378.html'),
+        'Xpert': (xpert, 'https://www.xpert.ru/products.php?showProduct=191570'),
+        'Compday': (compday, 'https://www.compday.ru/komplektuyuszie/protsessory/335378.htm'),
     }
 
     #   Checking whether the data was entered today or not
