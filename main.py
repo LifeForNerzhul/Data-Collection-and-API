@@ -42,11 +42,12 @@ def upload_to_db(shop_name: str, item_price: int, headers: dict):
         input(f'Ошибка при загрузке в БД, код {r.status_code}')
 
 
-def get_data(site: tuple, headers: dict):
+def get_data(site: tuple, headers: dict, recursion=False):
     """ Get HTML page from site and passes the HTML to the price lookup function, return int price or 0 if failed
 
     :param site: tuple that contains an indication of the processing function and site link
     :param headers: dict with headers to simulate a browser
+    :param recursion: bool Needed to prevent infinite recursion from running
     :return: int price or 0
     """
     try:
@@ -54,8 +55,14 @@ def get_data(site: tuple, headers: dict):
         soup = BeautifulSoup(html.text, 'html.parser')
         return site[0](soup)
 
-    except:
-        return 0
+    except AttributeError:
+        if recursion:
+            return 0
+        else:
+            return get_data(
+                site,
+                {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/116.0'},
+                True)
 
 
 def ali(soup):
@@ -97,5 +104,3 @@ if __name__ == '__main__':
         for i in site_dict:
             price = get_data(site_dict.get(i), browser_headers)
             upload_to_db(i, price, browser_headers)
-
-
