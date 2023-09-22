@@ -1,6 +1,38 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+import sys
+
+
+def check_import(module_name: str):
+    try:
+        """
+        sys.modules - it is a dictionary that stores information about all modules that have been imported
+                      into the current process.
+        __name__ - this is a special name that contains the name of the current module.
+        """
+        getattr(sys.modules[__name__], module_name)
+        return True
+    except AttributeError:
+        return False
+
+
+def plan_b(site: tuple):
+    options = webdriver.FirefoxOptions()
+    options.set_preference('dom.webdriver.enabled', False)
+    # eager strategy - the main content of the page has loaded and rendered, the user can already interact with it
+    options.page_load_strategy = 'eager'
+    options.headless = True     # браузер в фоне
+    browser = webdriver.Firefox(options=options)
+    browser.get(site[1])
+    html = browser.page_source
+    soup = BeautifulSoup(html, 'html.parser')
+    browser.quit()
+    try:
+        return site[0](soup)
+
+    except AttributeError:
+        return 0
 
 
 def last_upload(headers: dict):
@@ -103,4 +135,8 @@ if __name__ == '__main__':
     if last_upload(browser_headers) != datetime.today().strftime('%Y-%m-%d'):
         for i in site_dict:
             price = get_data(site_dict.get(i), browser_headers)
+            if price == 0:
+                if not check_import('webdriver'):
+                    from selenium import webdriver
+                price = plan_b(site_dict.get(i))
             upload_to_db(i, price, browser_headers)
