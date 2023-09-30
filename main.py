@@ -18,10 +18,17 @@ def check_import(module_name: str):
 
 
 def plan_b(site: tuple):
+    """
+    1 Launches the browser
+    2 Get HTML page from site and passes the HTML to the price lookup function, return int price or 0 if failed
+    :param site: tuple that contains an indication of the processing function and site link
+    :return: int price or 0
+    """
     options = webdriver.FirefoxOptions()
     options.set_preference('dom.webdriver.enabled', False)
     # eager strategy - the main content of the page has loaded and rendered, the user can already interact with it
     options.page_load_strategy = 'eager'
+    # options.page_load_strategy = 'normal'
     options.headless = True     # браузер в фоне
     browser = webdriver.Firefox(options=options)
     browser.get(site[1])
