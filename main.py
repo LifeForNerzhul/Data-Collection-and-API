@@ -5,6 +5,11 @@ import sys
 
 
 def check_import(module_name: str):
+    """
+    The function takes the name of the module and checks whether it is imported or not
+    :param module_name: name of module
+    :return: True if module imported and False if it is not
+    """
     try:
         """
         sys.modules - it is a dictionary that stores information about all modules that have been imported
