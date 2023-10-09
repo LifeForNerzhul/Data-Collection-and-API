@@ -32,4 +32,5 @@ def send_message_teleg(config: dict, message: str, headers: dict):
 
 if __name__ == '__main__':
     browser_headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/113.0'}
+    print(get_diff(browser_headers))
     send_message_teleg(read_config(), get_diff(browser_headers), browser_headers)

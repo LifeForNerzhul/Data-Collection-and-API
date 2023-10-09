@@ -154,5 +154,5 @@ if __name__ == '__main__':
                 price = plan_b(site_dict.get(i))
             upload_to_db(i, price, browser_headers)
 
-    #   Send a message with price changes
-    send_message_teleg(read_config(), get_diff(browser_headers), browser_headers)
+        #   Send a message with price changes
+        send_message_teleg(read_config(), get_diff(browser_headers), browser_headers)
