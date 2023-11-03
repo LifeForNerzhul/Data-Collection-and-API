@@ -112,7 +112,7 @@ def get_data(site: tuple, headers: dict, recursion=False):
 
 def ali(soup):
     """ function to find and return int price of item on html page on aliexpress """
-    return soup.find('div', class_='snow-price_SnowPrice__mainS__1cmks6').text.replace(' ', '').replace('₽', '')
+    return int(soup.find('div', class_='snow-price_SnowPrice__mainS__1cmks6').text.replace(' ', '').replace('₽', ''))
 
 
 def bit(soup):
