@@ -117,7 +117,7 @@ def ali(soup):
 
 def bit(soup):
     """ function to find and return int price of item on html page on 28bit.ru """
-    return int(soup.find('span', class_="price").text.replace('₽', '').replace(' ', ''))
+    return int(soup.find('div', class_="price product__price").text.replace(' ', '').replace('₽', ''))
 
 
 def xpert(soup):
