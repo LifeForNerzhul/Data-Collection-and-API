@@ -131,3 +131,5 @@ dmypy.json
 .idea/*
 geckodriver.log
 Config.txt
+Backup/*
+!Backup/Save_data.py
