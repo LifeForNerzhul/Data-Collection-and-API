@@ -9,8 +9,10 @@ def get_backup_data(headers: dict, link: str):
 
 
 def read_access_key():
+    # if the script is launched from main.py
     try:
         return open('Backup\\access.txt', 'r').read()
+    # if the script is launched from Save_data
     except FileNotFoundError:
         return open('access.txt', 'r').read()
 
@@ -34,6 +36,7 @@ def check_day_and_file(date):
 def check_dir():
     cur_folder = os.getcwd()
     cur_folder = cur_folder[cur_folder.rfind('\\') + 1::]
+    # go to the backup folder so that JSON is saved in it
     if cur_folder != 'Backup':
         os.chdir(os.getcwd() + '\\Backup')
 
