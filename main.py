@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import sys
 from Telegram_bot import read_config, get_diff, send_message_teleg
+from Backup import Save_data
 
 
 def check_import(module_name: str):
@@ -154,3 +155,4 @@ if __name__ == '__main__':
 
         #   Send a message with price changes
         send_message_teleg(read_config(), get_diff(browser_headers), browser_headers)
+        Save_data.make_backup()
