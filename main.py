@@ -147,7 +147,7 @@ if __name__ == '__main__':
     if last_upload(browser_headers) != datetime.today().strftime('%Y-%m-%d'):
         for i in site_dict:
             price = get_data(site_dict.get(i), browser_headers)
-            if price == 0:
+            if price == 0 and i != 'Xpert':     # looks like Xpert closed
                 if not check_import('webdriver'):
                     from selenium import webdriver
                 price = plan_b(site_dict.get(i))
