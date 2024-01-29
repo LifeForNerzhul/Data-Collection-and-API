@@ -152,6 +152,8 @@ if __name__ == '__main__':
                 if not check_import('webdriver'):
                     from selenium import webdriver
                 price = plan_b(site_dict.get(i))
+                if price == 0 and i == 'PYD Store':     # often failure, try again
+                    price = plan_b(site_dict.get(i))
             upload_to_db(i, price, browser_headers)
 
         #   Send a message with price changes
